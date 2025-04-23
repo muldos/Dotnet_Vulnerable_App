@@ -26,12 +26,6 @@ steps:
 - script: echo "AAAAAAAAAAAAAAAA - $(Build.BinariesDirectory)"
   displayName: 'Debug printout'
 
-- script: tree . /F
-  displayName: 'Debug printout'
-
-- script: sbom-tool generate -b .\bin\Release\net9.0\ -bc . -pn "MyConsoleApp" -pv "1.0.0" -ps "Evidente" -nsb "https://evidente.se/sbom" -pm
-  displayName: 'Generate SBOM'
-
 - task: DotNetCoreCLI@2
   displayName: 'Publish the project - Release'
   inputs:
@@ -40,6 +34,16 @@ steps:
     publishWebProjects: false
     arguments: '--no-build --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/$(buildConfiguration)'
     zipAfterPublish: true
+
+- script: echo "AAAAAAAAAAAAAAAA - $(Build.BinariesDirectory)"
+  displayName: 'Debug printout'
+
+- script: tree . /F
+  displayName: 'Debug printout'
+
+#- script: sbom-tool generate -b .\bin\Release\net9.0\ -bc . -pn "MyConsoleApp" -pv "1.0.0" -ps "Evidente" -nsb "https://evidente.se/sbom" -pm
+- script: sbom-tool generate -b $(Build.ArtifactStagingDirectory)/$(buildConfiguration) -bc . -pn "MyConsoleApp" -pv "1.0.0" -ps "Evidente" -nsb "https://evidente.se/sbom" -pm
+  displayName: 'Generate SBOM'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
