@@ -11,8 +11,13 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  trivySeverity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
 
+parameters:
+- name: TRIVY_SEVERITY
+  displayName: 'Trivy Severity Levels'
+  type: string
+  default: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
+  
 steps:
 
 # - task: UseDotNet@2
@@ -38,7 +43,7 @@ steps:
 
 # Run Trivy on the SBOM and exit with code 1 if any securoty issues are found
 - script: |
-    trivy sbom --severity $(trivySeverity) --format table --output $(Build.ArtifactStagingDirectory)/trivy-report.txt --exit-code 1 $(Build.ArtifactStagingDirectory)\$(buildConfiguration)\_manifest\spdx_2.2\manifest.spdx.json 
+    trivy sbom --severity ${{ parameters.TRIVY_SEVERITY }} --format table --output $(Build.ArtifactStagingDirectory)/trivy-report.txt --exit-code 1 $(Build.ArtifactStagingDirectory)\$(buildConfiguration)\_manifest\spdx_2.2\manifest.spdx.json 
     if %ERRORLEVEL% NEQ 0 (
       echo ##vso[task.logissue type=error]Vulnerabilities were found during the Trivy scan.
       echo ##vso[task.complete result=Failed]
