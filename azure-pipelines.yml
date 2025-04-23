@@ -23,6 +23,11 @@ steps:
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
 
+- script: echo "AAAAAAAAAAAAAAAA - $(Build.ArtifactStagingDirectory)/$(buildConfiguration)"
+
+- script: sbom-tool generate -b .\bin\Release\net9.0\ -bc . -pn "MyConsoleApp" -pv "1.0.0" -ps "Evidente" -nsb "https://evidente.se/sbom" -pm
+  displayName: 'Generate SBOM'
+
 - task: DotNetCoreCLI@2
   displayName: 'Publish the project - Release'
   inputs:
