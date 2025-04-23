@@ -39,7 +39,7 @@ steps:
 - script: sbom-tool generate -b $(Build.ArtifactStagingDirectory)/$(buildConfiguration) -bc . -pn "MyConsoleApp" -pv "1.0.0" -ps "Evidente" -nsb "https://evidente.se/sbom" -pm
   displayName: 'Generate SBOM'
 
-- script: tree . /F
+- script: tree $(Agent.WorkFolder) /F
   displayName: 'Debug printout'
 
 - script: trivy sbom $(Build.ArtifactStagingDirectory)\$(buildConfiguration)\_manifest\spdx_2.2\manifest.cdx.json
