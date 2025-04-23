@@ -24,6 +24,10 @@ steps:
   displayName: 'dotnet build $(buildConfiguration)'
 
 - script: echo "AAAAAAAAAAAAAAAA - $(Build.ArtifactStagingDirectory)/$(buildConfiguration)"
+  displayName: 'Debug printout'
+
+- script: dir $(Build.ArtifactStagingDirectory)/$(buildConfiguration)
+  displayName: 'Debug printout'
 
 - script: sbom-tool generate -b .\bin\Release\net9.0\ -bc . -pn "MyConsoleApp" -pv "1.0.0" -ps "Evidente" -nsb "https://evidente.se/sbom" -pm
   displayName: 'Generate SBOM'
