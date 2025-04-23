@@ -42,7 +42,7 @@ steps:
 - script: tree $(Agent.WorkFolder) /F
   displayName: 'Debug printout'
 
-- script: trivy sbom $(Build.ArtifactStagingDirectory)\$(buildConfiguration)\_manifest\spdx_2.2\manifest.cdx.json
+- script: trivy sbom $(Build.ArtifactStagingDirectory)\$(buildConfiguration)\_manifest\spdx_2.2\manifest.spdx.json
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
