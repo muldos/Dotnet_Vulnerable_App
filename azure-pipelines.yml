@@ -38,11 +38,11 @@ steps:
 # Run Trivy on the SBOM and exit with code 1 if any securoty issues are found
 - script: |
     trivy sbom --format table --output $(Build.ArtifactStagingDirectory)/trivy-report.txt --exit-code 1 $(Build.ArtifactStagingDirectory)\$(buildConfiguration)\_manifest\spdx_2.2\manifest.spdx.json 
-    if ($LASTEXITCODE -ne 0) {    
-      Write-Host "##vso[task.logissue type=error]Vulnerabilities were found during the Trivy scan."
-      Write-Host "##vso[task.complete result=Failed]"
+    if %ERRORLEVEL% NEQ 0 (
+      echo ##vso[task.logissue type=error]Vulnerabilities were found during the Trivy scan.
+      echo ##vso[task.complete result=Failed]
       exit 1
-    }
+    )
   displayName: 'Scan SBOM with Trivy'
 
 - task: PublishBuildArtifacts@1
