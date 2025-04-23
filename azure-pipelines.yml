@@ -23,9 +23,6 @@ steps:
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
 
-- script: echo "AAAAAAAAAAAAAAAA - $(Build.BinariesDirectory)"
-  displayName: 'Debug printout'
-
 - task: DotNetCoreCLI@2
   displayName: 'Publish the project - Release'
   inputs:
@@ -35,14 +32,12 @@ steps:
     arguments: '--no-build --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/$(buildConfiguration)'
     zipAfterPublish: true
 
-#- script: sbom-tool generate -b .\bin\Release\net9.0\ -bc . -pn "MyConsoleApp" -pv "1.0.0" -ps "Evidente" -nsb "https://evidente.se/sbom" -pm
 - script: sbom-tool generate -b $(Build.ArtifactStagingDirectory)/$(buildConfiguration) -bc . -pn "MyConsoleApp" -pv "1.0.0" -ps "Evidente" -nsb "https://evidente.se/sbom" -pm
   displayName: 'Generate SBOM'
 
-- script: tree $(Agent.WorkFolder) /F
-  displayName: 'Debug printout'
-
-- script: trivy sbom $(Build.ArtifactStagingDirectory)\$(buildConfiguration)\_manifest\spdx_2.2\manifest.spdx.json
+# Run Trivy on the SBOM and exit with code 1 if any securoty issues are found
+- script: trivy sbom --exit-code 1 $(Build.ArtifactStagingDirectory)\$(buildConfiguration)\_manifest\spdx_2.2\manifest.spdx.json
+  displayName: 'Scan SBOM with Trivy'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
