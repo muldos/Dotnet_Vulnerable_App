@@ -36,8 +36,15 @@ steps:
   displayName: 'Generate SBOM'
 
 # Run Trivy on the SBOM and exit with code 1 if any securoty issues are found
-- script: trivy sbom --exit-code 1 $(Build.ArtifactStagingDirectory)\$(buildConfiguration)\_manifest\spdx_2.2\manifest.spdx.json
+- script: trivy sbom --format table --output $(Build.ArtifactStagingDirectory)/trivy-report.json --exit-code 1 $(Build.ArtifactStagingDirectory)\$(buildConfiguration)\_manifest\spdx_2.2\manifest.spdx.json 
   displayName: 'Scan SBOM with Trivy'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Trivy report'
+  condition: failed()  
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/trivy-report.json'
+    ArtifactName: 'TrivyReport'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
