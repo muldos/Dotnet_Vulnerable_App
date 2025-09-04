@@ -2,3 +2,4 @@
 **/*.cdx.json
 **/bin/
 **/obj/
+.jfrog/
