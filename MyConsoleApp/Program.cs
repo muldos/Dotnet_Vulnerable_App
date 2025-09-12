@@ -7,6 +7,7 @@ public class User
     public int Age { get; set; }
     public string Role { get; set; }
 }
+// var mypwd = "SqcyDpetv+pCsbNYWHDLE8yR5mJ13MI+4d8NOwtM";
 
 public class Program
 {
@@ -25,7 +26,7 @@ public class Program
 
         Console.WriteLine("Serialized JSON:");
         Console.WriteLine(json);
-
+        // string mypwd = "SqcyDpetv+pCsbNYWHDLE8yR5mJ13MI+4d8NOwtM";
         // Deserialize the JSON back to an object
         try
         {
