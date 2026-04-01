@@ -1,6 +1,6 @@
 name: "Setup JFrog CLI OIDC Example"
-on: push
-
+on: 
+  workflow_dispatch:
 permissions:
   # This is required for requesting the OIDC token
   id-token: write
